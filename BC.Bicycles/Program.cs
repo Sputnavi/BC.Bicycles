@@ -2,8 +2,13 @@ using BC.Bicycles.Helpers;
 using BC.Bicycles.Helpers.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 var services = builder.Services;
+
+services.ConfigureSqlContext(configuration);
+services.RegisterRepositories();
 services.AddControllers().AddNewtonsoftJson();
+services.ConfigureCorsPolicy();
 services.ConfigureSwagger();
 
 var app = builder.Build();
