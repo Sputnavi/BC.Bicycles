@@ -1,5 +1,7 @@
 ﻿using BC.Bicycles.Repositories;
 using BC.Bicycles.Repositories.Interfaces;
+using BC.Bicycles.Services;
+using BC.Bicycles.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -18,7 +20,7 @@ namespace BC.Bicycles.Helpers.Extensions
 
         public static void RegisterServices(this IServiceCollection services)
         {
-            throw new NotImplementedException();
+            services.AddScoped<IBicycleService, BicycleService>();
         }
 
         public static void ConfigureCorsPolicy(this IServiceCollection services)
