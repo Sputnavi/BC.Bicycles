@@ -18,9 +18,6 @@ namespace BC.Bicycles.Repositories
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression) =>
             _repositoryContext.Set<T>().Where(expression).AsNoTracking();
 
-        public bool Exist(Expression<Func<T, bool>> expression) =>
-            _repositoryContext.Set<T>().Any(expression);
-
         public Task CreateAsync(T entity)
         {
             _repositoryContext.Set<T>().Add(entity);

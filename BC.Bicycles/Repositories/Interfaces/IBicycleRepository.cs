@@ -11,6 +11,5 @@ namespace BC.Bicycles.Repositories.Interfaces
         Task CreateBicycleAsync(Bicycle bicycle);
         Task DeleteBicycleAsync(Bicycle bicycle);
         Task UpdateBicycleAsync(Bicycle bicycle);
-        bool Exist(Expression<Func<Bicycle, bool>> expression);
     }
 }
