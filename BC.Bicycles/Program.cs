@@ -6,6 +6,7 @@ var configuration = builder.Configuration;
 var services = builder.Services;
 
 services.ConfigureSqlContext(configuration);
+services.AddAutoMapper(typeof(Program));
 services.RegisterRepositories();
 services.AddControllers().AddNewtonsoftJson();
 services.ConfigureCorsPolicy();
