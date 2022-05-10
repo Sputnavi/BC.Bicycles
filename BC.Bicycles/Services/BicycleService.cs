@@ -17,9 +17,9 @@ namespace BC.Bicycles.Services
     {
         private readonly IMapper _mapper;
         private readonly IBicycleRepository _bicycleRepository;
-        private readonly ILogger _logger; // ToDo D: Change to serilog.
+        private readonly ILogger<BicycleService> _logger; // ToDo D: Change to serilog.
 
-        public BicycleService(IMapper mapper, IBicycleRepository bicycleRepository, ILogger logger)
+        public BicycleService(IMapper mapper, IBicycleRepository bicycleRepository, ILogger<BicycleService> logger)
         {
             _mapper = mapper;
             _bicycleRepository = bicycleRepository;

@@ -1,33 +1,57 @@
 using BC.Bicycles.Helpers;
 using BC.Bicycles.Helpers.Extensions;
+using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration;
-var services = builder.Services;
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-services.ConfigureSqlContext(configuration);
-services.AddAutoMapper(typeof(Program));
-services.RegisterRepositories();
-services.RegisterServices();
-services.AddControllers().AddNewtonsoftJson();
-services.ConfigureCorsPolicy();
-services.ConfigureSwagger();
+Log.Information("Starting up");
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+try
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var builder = WebApplication.CreateBuilder(args);
+    builder.Host.UseSerilog((context, loggerConfiguration) => loggerConfiguration
+        .WriteTo.Console()
+        .ReadFrom.Configuration(context.Configuration));
+
+    var configuration = builder.Configuration;
+    var services = builder.Services;
+
+    services.ConfigureSqlContext(configuration);
+    services.AddAutoMapper(typeof(Program));
+    services.RegisterRepositories();
+    services.RegisterServices();
+    services.AddControllers().AddNewtonsoftJson();
+    services.ConfigureCorsPolicy();
+    services.ConfigureSwagger();
+
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+    app.UseSerilogRequestLogging();
+    app.UseMiddleware<ExceptionHandler>();
+
+    app.UseHttpsRedirection();
+    app.UseCors("CorsPolicy");
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.Run();
 }
-app.UseMiddleware<ExceptionHandler>();
-
-app.UseHttpsRedirection();
-app.UseCors("CorsPolicy");
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Unhandled exception");
+}
+finally
+{
+    Log.Information("Shut down complete");
+    Log.CloseAndFlush();
+}

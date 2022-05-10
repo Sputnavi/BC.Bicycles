@@ -13,9 +13,9 @@ namespace BC.Bicycles.Controllers;
 public class BicyclesController : ControllerBase
 {
     private readonly IBicycleService _bicycleService;
-    private readonly ILogger _logger;
+    private readonly ILogger<BicyclesController> _logger;
 
-    public BicyclesController(ILogger logger, IBicycleService bicycleService)
+    public BicyclesController(ILogger<BicyclesController> logger, IBicycleService bicycleService)
     {
         _logger = logger;
         _bicycleService = bicycleService;
