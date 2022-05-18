@@ -1,5 +1,6 @@
 using BC.Bicycles.Helpers;
 using BC.Bicycles.Helpers.Extensions;
+using MassTransit;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -25,6 +26,16 @@ try
     services.AddControllers().AddNewtonsoftJson();
     services.ConfigureCorsPolicy();
     services.ConfigureSwagger();
+    services.AddMassTransit(x =>
+        x.UsingRabbitMq((context, config) =>
+        {
+            config.Host("localhost", "/", h =>
+            {
+                h.Username("guest");
+                h.Password("guest");
+            });
+        })
+    );
 
     var app = builder.Build();
 
