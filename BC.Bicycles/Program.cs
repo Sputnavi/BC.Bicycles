@@ -1,5 +1,6 @@
 using BC.Bicycles.Helpers;
 using BC.Bicycles.Helpers.Extensions;
+using BC.Bicycles.Services;
 using MassTransit;
 using Serilog;
 
@@ -27,6 +28,9 @@ try
     services.ConfigureCorsPolicy();
     services.ConfigureSwagger();
     services.AddMassTransit(x =>
+    {
+        x.AddConsumer<UserUpdatedConsumer>();
+
         x.UsingRabbitMq((context, config) =>
         {
             config.Host("localhost", "/", h =>
@@ -34,8 +38,10 @@ try
                 h.Username("guest");
                 h.Password("guest");
             });
-        })
-    );
+
+            config.ConfigureEndpoints(context);
+        });
+    });
 
     var app = builder.Build();
 
