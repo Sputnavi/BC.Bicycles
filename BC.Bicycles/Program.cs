@@ -30,6 +30,7 @@ try
     services.AddMassTransit(x =>
     {
         x.AddConsumer<UserUpdatedConsumer>();
+        x.AddConsumer<UserDeletedConsumer>();
 
         x.UsingRabbitMq((context, config) =>
         {

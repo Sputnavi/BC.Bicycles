@@ -1,6 +1,6 @@
 ﻿using BC.Bicycles.Boundary.Features;
 using BC.Bicycles.Models;
-using System.Linq.Expressions;
+using BC.Messaging;
 
 namespace BC.Bicycles.Repositories.Interfaces
 {
@@ -11,5 +11,7 @@ namespace BC.Bicycles.Repositories.Interfaces
         Task CreateBicycleAsync(Bicycle bicycle);
         Task DeleteBicycleAsync(Bicycle bicycle);
         Task UpdateBicycleAsync(Bicycle bicycle);
+        Task UpdateBicyclesUserInfoAsync(UserUpdated userUpdated);
+        Task DeleteBicyclesUserInfoAsync(UserDeleted userUpdated);
     }
 }
