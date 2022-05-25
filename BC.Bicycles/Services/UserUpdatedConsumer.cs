@@ -1,5 +1,5 @@
 ﻿using BC.Bicycles.Repositories.Interfaces;
-using BC.Messages;
+using BC.Messaging;
 using MassTransit;
 using System.Text.Json;
 
