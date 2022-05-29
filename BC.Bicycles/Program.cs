@@ -27,22 +27,7 @@ try
     services.AddControllers().AddNewtonsoftJson();
     services.ConfigureCorsPolicy();
     services.ConfigureSwagger();
-    services.AddMassTransit(x =>
-    {
-        x.AddConsumer<UserUpdatedConsumer>();
-        x.AddConsumer<UserDeletedConsumer>();
-
-        x.UsingRabbitMq((context, config) =>
-        {
-            config.Host("localhost", "/", h =>
-            {
-                h.Username("guest");
-                h.Password("guest");
-            });
-
-            config.ConfigureEndpoints(context);
-        });
-    });
+    services.AddBCMessaging(configuration, builder.Environment.IsDevelopment());
 
     var app = builder.Build();
 
