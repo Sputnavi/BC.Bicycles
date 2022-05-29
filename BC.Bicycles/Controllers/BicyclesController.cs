@@ -42,6 +42,25 @@ public class BicyclesController : ControllerBase
     }
 
     /// <summary>
+    /// Return bicycles for specific user.
+    /// </summary>
+    /// <response code="200">List of bicycles returned successfully</response>
+    /// <response code="401">You need to authorize first</response>
+    /// <response code="403">Your role dosn't have enough rights</response>
+    /// <response code="500">Internal Server Error</response>
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(BicycleForReadModel[]))]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(BaseResponseModel))]
+    [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(BaseResponseModel))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(BaseResponseModel))]
+    [HttpGet("/api/users/{userId}/bicycles")]
+    public async Task<IActionResult> GetBicyclesForUser(Guid userId)
+    {
+        var bicycles = await _bicycleService.GetBicyclesForUserAsync(userId);
+
+        return Ok(bicycles);
+    }
+
+    /// <summary>
     /// Return Bicycle.
     /// </summary>
     /// <param name="id" example="D9F9841A-AACF-4BC4-924C-04C46E8274F1">The value that is used to find bicycle</param>

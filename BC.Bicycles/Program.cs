@@ -1,7 +1,5 @@
 using BC.Bicycles.Helpers;
 using BC.Bicycles.Helpers.Extensions;
-using BC.Bicycles.Services;
-using MassTransit;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()

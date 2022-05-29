@@ -38,6 +38,13 @@ namespace BC.Bicycles.Services
             return _mapper.Map<List<BicycleForReadModel>>(bicycles);
         }
 
+        public async Task<List<BicycleForReadModel>> GetBicyclesForUserAsync(Guid userId)
+        {
+            var bicycles = await _bicycleRepository.GetBicyclesForUserAsync(userId);
+
+            return _mapper.Map<List<BicycleForReadModel>>(bicycles);
+        }
+
         public async Task<BicycleForReadModel> GetBicycleAsync(Guid id)
         {
             var bicycleEntity = await _bicycleRepository.GetBicycleAsync(id);

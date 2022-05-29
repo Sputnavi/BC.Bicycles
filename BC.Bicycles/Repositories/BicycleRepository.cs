@@ -24,6 +24,9 @@ namespace BC.Bicycles.Repositories
         public async Task<Bicycle> GetBicycleAsync(Guid id) =>
             await FindByCondition(p => p.Id.Equals(id)).SingleOrDefaultAsync();
 
+        public async Task<List<Bicycle>> GetBicyclesForUserAsync(Guid userId) =>
+            await FindByCondition(b => b.UserId.Equals(userId)).ToListAsync();
+
         public async Task<PagedList<Bicycle>> GetBicyclesAsync(BicycleParameters bicycleParameters)
         {
             var bicycles = await FindAll()
