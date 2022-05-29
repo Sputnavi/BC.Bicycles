@@ -2,6 +2,7 @@
 using BC.Bicycles.Models;
 using BC.Bicycles.Repositories.Extensions;
 using BC.Bicycles.Repositories.Interfaces;
+using BC.Messaging;
 using Microsoft.EntityFrameworkCore;
 
 namespace BC.Bicycles.Repositories
@@ -31,6 +32,30 @@ namespace BC.Bicycles.Repositories
                 .ToListAsync();
 
             return PagedList<Bicycle>.ToPagedList(bicycles, bicycleParameters.PageNumber, bicycleParameters.PageSize);
+        }
+
+        public async Task UpdateBicyclesUserInfoAsync(UserUpdated userUpdated)
+        {
+            var bicyclesToUpdate = FindByCondition(x => x.UserId == userUpdated.Id);
+
+            foreach (var bicycle in bicyclesToUpdate)
+            {
+                bicycle.Email = userUpdated.Email;
+            }
+
+            await _repositoryContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteBicyclesUserInfoAsync(UserDeleted userUpdated)
+        {
+            var bicyclesToUpdate = FindByCondition(x => x.UserId == userUpdated.Id);
+
+            foreach (var bicycle in bicyclesToUpdate)
+            {
+                bicycle.UserId = null;
+            }
+
+            await _repositoryContext.SaveChangesAsync();
         }
     }
 }

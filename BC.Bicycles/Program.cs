@@ -1,5 +1,7 @@
 using BC.Bicycles.Helpers;
 using BC.Bicycles.Helpers.Extensions;
+using BC.Bicycles.Services;
+using MassTransit;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -25,6 +27,7 @@ try
     services.AddControllers().AddNewtonsoftJson();
     services.ConfigureCorsPolicy();
     services.ConfigureSwagger();
+    services.AddBCMessaging(configuration, builder.Environment.IsDevelopment());
 
     var app = builder.Build();
 
