@@ -28,6 +28,8 @@ namespace BC.Bicycles.Helpers.Extensions
         {
             if (isDevelopment)
             {
+                var rabbitMqSection = configuration.GetSection("RabbitMQ");
+
                 services.AddMassTransit(x =>
                 {
                     x.AddConsumer<UserUpdatedConsumer>();
@@ -35,10 +37,10 @@ namespace BC.Bicycles.Helpers.Extensions
 
                     x.UsingRabbitMq((context, config) =>
                     {
-                        config.Host("localhost", "/", h =>
+                        config.Host(rabbitMqSection["host"], rabbitMqSection["virtualHost"], h =>
                         {
-                            h.Username("guest");
-                            h.Password("guest");
+                            h.Username(rabbitMqSection["username"]);
+                            h.Password(rabbitMqSection["password"]);
                         });
 
                         config.ConfigureEndpoints(context);
