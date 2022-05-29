@@ -32,8 +32,8 @@ public class BicyclesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(BaseResponseModel))]
     [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(BaseResponseModel))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(BaseResponseModel))]
-    [HttpGet]
-    [HttpHead]
+    [HttpGet(Name = "GetBicycleList")]
+    [HttpHead(Name = "HeadBicycleList")]
     public async Task<IActionResult> GetBicycleList([FromQuery] BicycleParameters bicycleParameters)
     {
         var bicycles = await _bicycleService.GetBicycleListAsync(bicycleParameters, Response);
@@ -52,7 +52,7 @@ public class BicyclesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(BaseResponseModel))]
     [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(BaseResponseModel))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(BaseResponseModel))]
-    [HttpGet("/api/users/{userId}/bicycles")]
+    [HttpGet("/api/users/{userId}/bicycles", Name = "GetBicyclesForUser")]
     public async Task<IActionResult> GetBicyclesForUser(Guid userId)
     {
         var bicycles = await _bicycleService.GetBicyclesForUserAsync(userId);
@@ -96,7 +96,7 @@ public class BicyclesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized, Type = typeof(BaseResponseModel))]
     [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(BaseResponseModel))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(BaseResponseModel))]
-    [HttpPost]
+    [HttpPost(Name = "CreateBicycle")]
     public async Task<IActionResult> CreateBicycle([FromBody] BicycleForCreateOrUpdateModel bicycle)
     {
         this.ValidateObject();
@@ -120,7 +120,7 @@ public class BicyclesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(BaseResponseModel))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(BaseResponseModel))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(BaseResponseModel))]
-    [HttpDelete("{id}")]
+    [HttpDelete("{id}", Name = "DeleteBicycle")]
     public async Task<IActionResult> DeleteBicycle(Guid id)
     {
         await _bicycleService.DeleteBicycleAsync(id);
@@ -145,7 +145,7 @@ public class BicyclesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(BaseResponseModel))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(BaseResponseModel))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(BaseResponseModel))]
-    [HttpPut("{id}")]
+    [HttpPut("{id}", Name = "UpdateBicycle")]
     public async Task<IActionResult> UpdateBicycle(Guid id, [FromBody] BicycleForCreateOrUpdateModel bicycle)
     {
         this.ValidateObject();
@@ -172,7 +172,7 @@ public class BicyclesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status403Forbidden, Type = typeof(BaseResponseModel))]
     [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(BaseResponseModel))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(BaseResponseModel))]
-    [HttpPatch("{id}")]
+    [HttpPatch("{id}", Name = "PartiallyUpdateBicycle")]
     public async Task<IActionResult> PartiallyUpdateBicycle(Guid id,
         [FromBody] JsonPatchDocument<BicycleForCreateOrUpdateModel> patchDoc)
     {
