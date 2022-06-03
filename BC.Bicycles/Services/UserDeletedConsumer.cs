@@ -1,7 +1,6 @@
 ﻿using BC.Bicycles.Repositories.Interfaces;
 using BC.Messaging;
 using MassTransit;
-using Newtonsoft.Json;
 
 namespace BC.Bicycles.Services
 {
@@ -19,7 +18,7 @@ namespace BC.Bicycles.Services
         public async Task Consume(ConsumeContext<UserDeleted> context)
         {
             var message = context.Message;
-            _logger.LogInformation($"Got UserUpdated event {JsonConvert.SerializeObject(message)}");
+            _logger.LogInformation($"Got UserUpdated event: {message}");
 
             await _bicycleRepository.DeleteBicyclesUserInfoAsync(message);
         }

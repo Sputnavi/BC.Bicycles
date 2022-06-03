@@ -26,38 +26,39 @@ namespace BC.Bicycles.Helpers.Extensions
 
         public static void AddBCMessaging(this IServiceCollection services, IConfiguration configuration, bool isDevelopment)
         {
-            if (isDevelopment)
+            services.AddMassTransit(x =>
             {
-                var rabbitMqSection = configuration.GetSection("RabbitMQ");
+                x.AddConsumer<UserUpdatedConsumer>()
+                    .Endpoint(e => e.Name = "UserUpdated.Bicycles");
+                x.AddConsumer<UserDeletedConsumer>()
+                    .Endpoint(e => e.Name = "UserDeleted.Bicycles");
 
-                services.AddMassTransit(x =>
+                if (isDevelopment)
                 {
-                    x.AddConsumer<UserUpdatedConsumer>();
-                    x.AddConsumer<UserDeletedConsumer>();
-
+                    var rabbitMqSection = configuration.GetSection("RabbitMQ");
+                    string host = rabbitMqSection["host"];
+                    string virtualHost = rabbitMqSection["virtualHost"];
+                    string username = rabbitMqSection["username"];
+                    string password = rabbitMqSection["password"];
+                    
                     x.UsingRabbitMq((context, config) =>
                     {
-                        config.Host(rabbitMqSection["host"], rabbitMqSection["virtualHost"], h =>
+                        config.Host(host, virtualHost, h =>
                         {
-                            h.Username(rabbitMqSection["username"]);
-                            h.Password(rabbitMqSection["password"]);
+                            h.Username(username);
+                            h.Password(password);
                         });
 
                         config.ConfigureEndpoints(context);
                     });
-                });
 
-                return;
-            }
+                    return;
+                }
 
-            services.AddMassTransit(x =>
-            {
-                x.AddConsumer<UserUpdatedConsumer>();
-                x.AddConsumer<UserDeletedConsumer>();
-
+                string azureServiceBusConnection = configuration.GetConnectionString("AzureServiceBusConnection");
                 x.UsingAzureServiceBus((context, config) =>
                 {
-                    config.Host(configuration.GetConnectionString("AzureServiceBusConnection"));
+                    config.Host(azureServiceBusConnection);
 
                     config.ConfigureEndpoints(context);
                 });
